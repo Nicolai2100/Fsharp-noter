@@ -11,120 +11,6 @@ let main argv =
     0 // return an integer exit code
 
 
-let circleArea r = System.Math.PI * r * r
-
-(*  Declarearecursivefunction f: int -> int ,where f ( n )=1+2+ ··· +( n − 1) + n for n ≥ 0 . 
-(Hint: use two clauses with 0 and n as patterns.) 
-State the recursion formula corresponding to the declaration. Give an evaluation for f (4) . *)
-
-let rec f n = 
-    match n with
-    | 0 -> 0
-    | n -> n + f(n-1);; 
-
-    (* *)
-
-let rec f2 (m,n) = 
-    match (m,n) with
-    | (_,0) -> m
-    | (m,_) -> m + n + f2 (m, n-1) 
-    ;;
-
-let rec f3 (n,k) = 
-    match (n,k) with
-    | (n,0) -> 1
-    | (n, k) when k = n -> 1
-    | (n, k) -> f3(n-1, k-1) + f3(n-1, k)
-    ;;
-
-    (*  DeclareanF#function multiplicity x xs to find the number of times the value x occurs in the list xs .*)
-
-let rec f5 (xs, s) =
-    match (xs) with
-    | ([]) -> 0
-    | head::tail when head = s -> 1 + f5 (tail,s)
-    | _::tail ->  f5 (tail,s);;
-f5 ([1;2],2);;
-
-(* Poly projekt part 1 *)
-
-// add Poly -> Poly -> Poly
-
-let rec add (poly1, poly2) =
-    match (poly1, poly2) with
-    | ([], poly2) -> poly2
-    | (poly1, []) -> poly1
-    | (head1::poly1, head2::poly2) -> head1 + head2::add(poly1, poly2)  
-
-add ([],[1;2]);;
-add ([2;1],[]);;
-add ([1;2],[1;0;2]);;
-
-
-// mulC: int -> Poly -> Poly
-
-//let rec mulC (x, poly) =
-//    match (x, poly) with
-//    | (0, _) -> []   
-//    | (_, []) -> []
-//    | (1, _) -> poly
-//    | (_, head::poly) -> x * head::mulC(x,poly)  
-
-let rec mulC (k, poly) =
-    match (poly) with
-    | ([]) -> []
-    | (x::xtail) -> k * x ::mulC(k, xtail)  
-
-mulC (2, [1; 2; 3; 1]) ;;
-mulC (2, [2; 0; 0; 1]) ;;
-
-
-// sub: Poly -> Poly -> Poly
-
-let rec sub (poly1, poly2) =
-    match (poly1, poly2) with
-    | ([], head2::poly2) -> - head2::sub(poly1, poly2)
-    | (poly1, []) -> poly1
-    | (head1::poly1, head2::poly2) -> head1 - head2::sub(poly1, poly2)  
-
-sub ([],[1;2]);;
-sub ([2;1],[]);;
-sub ([1;2],[1;0;2]);;
-
-
-// mulX: Poly -> Poly
-
-let rec mulX (poly) =
-    match (poly) with
-    | ([]) -> []
-    | (poly) -> 0::poly
-
-mulX [2;0;0;1];;
-
-
-// mul: Poly -> Poly -> Poly
-let rec mul (poly1, poly2) =
-    match (poly1, poly2) with
-    | ([], _) -> []
-    | (_, []) -> []
-    | (head1::poly1, poly2) -> add((mulC(head1, poly2), mul(poly1, mulX(poly2)))) ;;                          
-mul ([2;3;0;1],[1;2;3]);;
-//2 + 7x + 12x2 + 10x3 + 2x4 + 3x5.
-
-
-// eval: int -> Poly -> int
-
-let eval3 (a, xs) = 
-    let rec solve a (xs) = 
-        match(xs) with
-        | [] -> 0
-        | head::tail -> head * power(a, tail.Length) + solve a tail
-    let reversed = List.rev xs
-    solve a reversed;;               
-
-eval3 (2, [2; 3; 0; 1]);;
-
-
 let rec repeat f i x =
     if i = 0 then x else repeat f (i-1) (f x);;
 (* 
@@ -238,14 +124,44 @@ ip([ x 0 ; x 1 ; ... ; x n − 1 ],[ y 0 ; y 1 ; ... ; y n − 1 ]) = [( x 0 ,y 
 
 let rec zip xs ys =
     match (xs, ys) with
-    | [], [] -> [(0,0)] 
+    | [], [] -> [] 
     | x::rextx, y::resty -> let (list) = zip rextx resty
                             (x, y)::list;;
 zip [1;2] [1;2];;
 
 
-//| x::xs -> let (a, b) = zip (xRest, yRest)   (x::a, y::b)
+   
 
+//4.12
+(*
+p(x) x > 0
+the sum of elements in xs satisfying the condition of px
+*)
+
+let p x = if x > 0 then true else false;;
+
+p 2;;
+p -1;;
+p 0;;
+
+// let p x = x > 0;;
+
+//let rec sum xs = if p(x::xs) then let realSum = sum(xs)
+//                                  realSum 
+//                                  else 0;;
+
+
+//let rec sum p xs
+//    function
+//    | [] -> 0
+//    | x:xs when p(x) -> let (realSum) x = sum(xs)
+//                        1+realSum;;
+
+
+let rec split = 
+    function
+    | [] -> ([],[]) 
+    | x1::x2::rest -> let (a, b) = split rest
+                      (x1::a, x2::b);;
 split [1;2;1;2];;
-
-    // 4.9, 4.12
+                       

@@ -6,7 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Program.fs" />
+    <Compile Include="Poly.fs" />
+    <Compile Include="Opgaver1.fs" />
+    <Compile Include="Opgaver2.fs" />
   </ItemGroup>
 
 </Project>
