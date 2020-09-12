@@ -138,30 +138,24 @@ p(x) x > 0
 the sum of elements in xs satisfying the condition of px
 *)
 
-let p x = if x > 0 then true else false;;
-
+let p x = x > 0;;
 p 2;;
 p -1;;
 p 0;;
 
-// let p x = x > 0;;
+let rec fib n = if n < 2 then 1 else fib (n - 1) + fib (n - 2)
 
-//let rec sum xs = if p(x::xs) then let realSum = sum(xs)
-//                                  realSum 
-//                                  else 0;;
+let rec sum p x xs = 
+    if p(x) && x = head::xs  then 1 + sum(p x xs)
+    else 0 + sum(p x xs)  ;;
+                                
+let rec sum2 (p, x, xs) =
+    match (xs) with
+    | ([]) -> 0
+    | (head::xs) when head <> x -> sum2(p, x, xs )
+    | (head::xs) when p(x) && head = x -> 1 + sum2(p, x, xs );;  
 
-
-//let rec sum p xs
-//    function
-//    | [] -> 0
-//    | x:xs when p(x) -> let (realSum) x = sum(xs)
-//                        1+realSum;;
-
-
-let rec split = 
-    function
-    | [] -> ([],[]) 
-    | x1::x2::rest -> let (a, b) = split rest
-                      (x1::a, x2::b);;
-split [1;2;1;2];;
-                       
+sum2 (p, 1,[1;2]);;
+sum2 (p, 2,[]);;
+sum2 (p, 3,[1;0;2]);;
+sum2 (p, 3,[3;0;3]);;
