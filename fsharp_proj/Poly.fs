@@ -129,13 +129,10 @@ let rec toString (ns) =
         match(revNs) with
         | [] -> ""
         | head::tail -> let str = toString (List.rev tail) 
-                        
-                        //Last run
-                        if tail.Length > 1 then str + string(head) + "x^" + string tail.Length
-                     
-                        else str + string(head) + "x^" + string tail.Length  + " + "
+                        if str.Length = 0 then str + string(head) + "x + "
+                        else str + string(head) + "x^" + string tail.Length + "x + "
     ;;
-toString ([1;2;3;0;0])
+toString ([0;1;2;3;0;0])
 toString ([1;2;3])
 
 toString ([])
