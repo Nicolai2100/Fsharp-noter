@@ -128,9 +128,9 @@ let rec toString (ns) =
         let revNs =  if not (isLegal (ns)) then List.rev (prune(ns)) else List.rev ns
         match(revNs) with
         | [] -> ""
-        | head::tail -> let str = toString (List.rev tail) 
-                        if str.Length = 0 then str + string(head) + "x + "
-                        else str + string(head) + "x^" + string tail.Length + "x + "
+        | head::tail -> let str = toString (List.rev tail)
+                        if str.Length = 0 then str + string(head) + "x"
+                        else str + " + " + string(head) + "x^" + string tail.Length
     ;;
 toString ([0;1;2;3;0;0])
 toString ([1;2;3])
