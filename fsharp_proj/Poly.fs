@@ -68,15 +68,14 @@ mul ([2;3;0;1], [1;2;3]);;
 //2 + 7x + 12x2 + 10x3 + 2x4 + 3x5.
 
 // eval: int -> Poly -> int
-let eval3 (a, xs) = 
-    let rec solve a (xs) = 
-        match(xs) with
-        | [] -> 0
-        | head::tail -> head * power(a, tail.Length) + solve a tail
-    let reversed = List.rev xs
-    solve a reversed;;               
+let rec eval (a, xs) = 
+    let xsRev = List.rev xs
+    match(xsRev) with
+    | [] -> 0
+    | head::tail -> int (float(head) * Math.Pow(float a, float (tail.Length))) + eval(a, List.rev tail)  ;;
 
-eval3 (2, [2; 3; 0; 1]);;
+eval (2, [2; 3; 0; 1]);;
+eval (1, [1; 1; 1; 1]);;
 
 (* Poly 2 *)
 
@@ -134,21 +133,44 @@ let rec toString (ns) =
     ;;
 toString ([0;1;2;3;0;0])
 toString ([1;2;3])
-
 toString ([])
 toString ([0;0;0])
 toString ([0;0;1])
 
 
-let snaps = "";;
-   snaps.Length;;
-
 (*
 function derivative: Poly -> Poly
 For a polynomial P(x) = a0 + a1  x + a2  x2 + ::: + an  xn, we recall that the derivative is
 P0(x) = a1 + 2  a2  x + ::: + n  an  xn􀀀1
-
 *)
+
+let rec derivative (xs) = 
+    let revNs = List.rev xs
+    match(revNs) with
+    | [] -> []
+    //| head::tail when head = 0 -> prune (List.rev (tail))
+    | head::tail -> let list = derivative(List.rev tail)
+                     List.append (tail.Length * head);;
+   // | head::tail ->  List.append (derivative( List.rev tail), (tail.Length * head));;
+    //| (x::xtail) -> k * x ::mulC(k, xtail)  
+
+let rec derivative (xs) = 
+    let revNs = List.rev xs
+    match(revNs) with
+    | [] -> []
+    | head::tail when tail.Length < 1 -> [] 
+    | head::tail ->  (tail.Length * head)::derivative( List.rev tail);;
+    
+derivative ([1;2;3;4]);;
+
+//let rec eval (a, xs) = 
+//    let xsRev = List.rev xs
+//    match(xsRev) with
+//    | [] -> 0
+//    | head::tail -> int (float(head) * Math.Pow(float a, float (tail.Length))) + eval(a, List.rev tail)  ;;
+
+//eval (2, [2; 3; 0; 1]);;
+//eval (1, [1; 1; 1; 1]);;
 
 
 (*
@@ -167,4 +189,5 @@ However,
 oating point numbers (type float) only provide approximations of the real
 numbers, and these approximations will cause many extra technicalities when we con-
 sider property-based testing in Part 5. These technicalities are not particularly related to
-functional programming, so we stick to the integer-based types in this exercise.*)
+functional programming, so we stick to the integer-based types in this exercise.
+*)
