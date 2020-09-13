@@ -29,19 +29,10 @@ let rec mulC (k, poly) =
     match (poly) with
     | ([]) -> []
     | (x::xtail) -> k * x ::mulC(k, xtail)  
-
 mulC (2, [1; 2; 3; 1]) ;;
 mulC (2, [2; 0; 0; 1]) ;;
 
-
 // sub: Poly -> Poly -> Poly
-
-//let rec sub (poly1, poly2) =
-//    match (poly1, poly2) with
-//    | ([], head2::poly2) -> - head2::sub(poly1, poly2)
-//    | (poly1, []) -> poly1
-//    | (head1::poly1, head2::poly2) -> head1 - head2::sub(poly1, poly2)  
-
 let sub (p1, p2) = add (p1, (mulC (-1, p2)));;
    
 sub ([],[1;2]);;
@@ -134,44 +125,22 @@ let rec toString (ns) =
 toString ([0;1;2;3;0;0])
 toString ([1;2;3])
 toString ([])
-toString ([0;0;0])
 toString ([0;0;1])
-
 
 (*
 function derivative: Poly -> Poly
 For a polynomial P(x) = a0 + a1  x + a2  x2 + ::: + an  xn, we recall that the derivative is
 P0(x) = a1 + 2  a2  x + ::: + n  an  xn􀀀1
 *)
-
 let rec derivative (xs) = 
-    let revNs = List.rev xs
+    let revNs = List.rev (prune xs)
     match(revNs) with
     | [] -> []
-    //| head::tail when head = 0 -> prune (List.rev (tail))
-    | head::tail -> let list = derivative(List.rev tail)
-                     List.append (tail.Length * head);;
-   // | head::tail ->  List.append (derivative( List.rev tail), (tail.Length * head));;
-    //| (x::xtail) -> k * x ::mulC(k, xtail)  
-
-let rec derivative (xs) = 
-    let revNs = List.rev xs
-    match(revNs) with
-    | [] -> []
-    | head::tail when tail.Length < 1 -> [] 
-    | head::tail ->  (tail.Length * head)::derivative( List.rev tail);;
-    
+    | _::tail when tail.Length < 1 -> [] 
+    | head::tail -> let newList = derivative( List.rev tail)
+                    List.append newList [(tail.Length * head)];;
 derivative ([1;2;3;4]);;
-
-//let rec eval (a, xs) = 
-//    let xsRev = List.rev xs
-//    match(xsRev) with
-//    | [] -> 0
-//    | head::tail -> int (float(head) * Math.Pow(float a, float (tail.Length))) + eval(a, List.rev tail)  ;;
-
-//eval (2, [2; 3; 0; 1]);;
-//eval (1, [1; 1; 1; 1]);;
-
+derivative ([1;2;3;4;0]);;
 
 (*
 The function compose: Poly -> Poly -> Poly
