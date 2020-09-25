@@ -9,6 +9,8 @@
     <Compile Include="Poly.fs" />
     <Compile Include="Opgaver1.fs" />
     <Compile Include="Opgaver2.fs" />
+    <Compile Include="Opgaver3.fs" />
+    <Compile Include="Opgaver4.fs" />
   </ItemGroup>
 
 </Project>

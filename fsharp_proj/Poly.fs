@@ -120,8 +120,7 @@ let rec toString (ns) =
         | [] -> ""
         | head::tail -> let str = toString (List.rev tail)
                         if str.Length = 0 then str + string(head) + "x"
-                        else str + " + " + string(head) + "x^" + string tail.Length
-    ;;
+                        else str + " + " + string(head) + "x^" + string tail.Length;;
 toString ([0;1;2;3;0;0])
 toString ([1;2;3])
 toString ([])
@@ -159,4 +158,38 @@ oating point numbers (type float) only provide approximations of the real
 numbers, and these approximations will cause many extra technicalities when we con-
 sider property-based testing in Part 5. These technicalities are not particularly related to
 functional programming, so we stick to the integer-based types in this exercise.
-*)
+//*)
+//let rec compose (xs, ys) = 
+//    let revXs = List.rev (prune xs)
+//    let legalYs = prune ys
+//    match(revXs, legalYs) with
+//    | [], [] -> []
+//    | headX::tail, ys when tail.Length < 1 -> add ([headX], compose(tail, ys))
+//    | headX::tail, headY::tailY -> let newList = compose ((List.rev tail), legalYs)
+//                     // add((mulC (headX, legalYs) ), newList) ;;
+//                                   //add(( (headX, legalYs)  ), newList) ;;
+//                     //add( (mulX(mulC (head, legalYs))), newList) ;;
+
+
+let rec compose (xs, ys) = 
+    let revXs = List.rev (prune xs)
+    let legalYs = prune ys
+    match(revXs) with
+    | [] -> []
+    | headX::tail when tail.Length < 1 -> add ([headX], compose(tail, ys))
+    | headX::tail -> let newList = compose ((List.rev tail), legalYs)
+                     if tail.Length < 2 then add((mulC (headX, legalYs) ), newList)
+                     else add(mulX(mulC (headX, legalYs) ), newList) ;;
+
+compose ([1;2], [0;3]);;
+compose ([1;2], [3;3]);;
+
+mulX (mulC (3, [0;0;3]));;
+
+compose ([0;0;3], [2]);;
+compose ([1;2;3], [3;3]);;
+
+3.0 ** 3.0;;
+
+3.0 ** (1.0 * float 3 );;
+
