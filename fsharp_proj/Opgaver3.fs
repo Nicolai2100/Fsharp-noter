@@ -12,187 +12,160 @@ let main argv =
    
     0 // return an integer exit code
 
+//4.18
+
+let rec f g = function
+    | [] -> []
+    | x::xs -> (g x) :: f (fun y -> g(g(y) ) ) xs ;;
+
+f (fun x -> x + 1) [0;0;0;0;0];;
+
 (* 1 *)
-type name = string ;;
+type Name = string ;;
 type no = string;;
 type yb = int;;
-type ths = string list;;
-type description = (no * yb * ths) ;;
-type reg = ( name * description  );;
+type Themes = string list;;
+type Description = (no * yb * Themes) ;;
+type Member = Name * Description;;
+type Register = Member List ;;
 
-type ybValidator = yb -> bool ;;
-type thsValidator = ths -> bool ;;
-type Arrangement = ( ybValidator * thsValidator ) ;;
+type Arrangement = Member -> bool ;;
 
-(* 2 *)
+let p1 (name,(no, yb, ths)) = yb > 1982 && List.contains "jazz" ths;;
 
-//& let reg : reg list = []:reg ;;
+let m1:Member = ("Karl Karlsen", ("22342016", 1991, ["ost";"jazz"]));;
+let m2:Member = ("Karl2 Karlsen2", ("22342016", 1977, ["ost";"jazz"]));;
+let memberList:Register = [m1;m2];;
+p1 (m1);;
 
-(* Let, for example, the predicate p1(no, yb, ths) be true for a given
-description (no, yb, ths) of a club member when yb is greater than 1982 and ths includes ”soccer” and ”jazz”. This predicate describes an arrangement directed to young club members
-that are interested in both soccer and jazz  
-*)
+//3. A declaration of a function extractTargetGroup p r that gives a list with names and 
+//phone numbers of the members in register r that may be interested in the arrangement p. 
+//State the type of extractTargetGroup in a comment. Make use of the type names introduced
+//under point 1. above, so that the type reflects the intention with the function. 
 
-let oldEnough yearBorn targetYear = yearBorn > targetYear ;;  
-let rec interested (subjectInterests:ths, interestTargets:ths) = 
-    match(subjectInterests, interestTargets) with
-    | [], _ -> false
-    | _ , [] -> true
-    | _, head::rest -> let conta = interested (subjectInterests, rest)
-                       conta = (List.contains head subjectInterests) ;;
-let ths1 = ["snow";"jazz"];;
-let ths2 = ["jazz"; "snow"];;
+// let extractTargetGroup (p : Arrangement, r : Register) = List.filter ( fun x -> p x ) r  ;;
 
-interested (ths1, ths2);;
+let rec extractTargetGroup (p : Arrangement, r : Register) = 
+    match r with
+    | [] -> []
+    | (name,Description)::register when p (name, Description) -> let newMemberList = extractTargetGroup (p, register) 
+                                                                 let number,_,_ = Description
+                                                                 (name, number)::newMemberList
+    | _::register -> extractTargetGroup (p, register)  ;;      
 
-// let interestedOldEnough (arr:Arrangement, des:description) = oldEnough(ybValidator) && interested()
-
-
-let rec repeat f i x =
-    if i = 0 then x else repeat f (i-1) (f x);;
-(* 
-        type repeat (int -> int) -> int -> int -> int
-(argument) -> result
- x could be float, not i
- computed:
- repeat h 2 0 
- repeat h 1 (h 0) = 1 
- repeat h 0 (h 1) = 2
- 2
-*)
+extractTargetGroup (p1, memberList);;
 
 
-(* 
-    Uge 2
-    HR 2.1, 2.2, 2.13, 4.3, 4.8, 4.9, 4.12
-    Addendum to Exercise on polynimials: Part 1
-    Declare a higher-order function: f so that add = f (+) and sub = f (-)
-    Exercise on polynomials: Part 2. You may also consider/start on Part 3
+(* 3.3 *)
 
-*)
-
-//2.1 f: int -> bool
-
-
-let f (x) = ((x % 2 = 0 || x % 3 = 0) && x % 5 <> 0) ;;
-
-f (24);;
-f (27);;
-f (29) ;;
-f (30);;
-
-
-//2.2 f: int -> bool
-let rec pow (str, x) = 
-    match (x) with
-        | (0) -> ""
-        | (x') when x' > 0 -> str + pow(str, x-1);;
-
-pow ("2", 2);;
-pow ("Hej ", 4);;
-pow ("Hej ", 0);;
-pow ("Hej ", -4);;
-
-
-//pow: string * int -> string
-
-//2.13, f: int -> bool
-
-(*  
-
- Thefunctions curry and uncurry of types 
- curry :(’a * ’b -> ’c) -> ’a -> ’b -> ’c 
- uncurry : (’a -> ’b -> ’c) -> ’a * ’b -> ’c are defined in the following way: 
- curry f is the function g where gx is the function h where hy = f ( x, y ) . 
- uncurry g is the function f where f ( x, y ) is the value hy for the function h = gx . 
-*)
-let rec curry (str, x) = 
-    match (x) with
-        | (0) -> ""
-        | (x') when x' > 0 -> str + pow(str, x-1);;
-
-let rec uncurry (str, x) = 
-    match (x) with
-        | (0) -> ""
-        | (x') when x' > 0 -> str + pow(str, x-1);;
-        
-
-pow ("2", 2);;
-pow ("Hej ", 4);;
-pow ("Hej ", 0);;
-pow ("Hej ", -4);;
-
-
-
-//4.3 declarefunction evenN: int -> int list such that evenN n generates the
-// list of the first n non-negative even numbers., 
-
-let evenN (x) = [0 .. 2 .. (x-1)*2];;
-evenN 4;;
-
-
-
-
-
-//4.8,  DeclareanF#function split such that: split
-// [ x 0 ; x 1 ; x 2 ; x 3 ; ... ; x n − 1 ] =( [ x 0 ; x 2 ; ... ] , [ x 1 ; x 3 ; ... ] )  
-    
-
-let rec split = 
-    function
-    | [] -> ([],[]) 
-    | x1::x2::rest -> let (a, b) = split rest
-                      (x1::a, x2::b);;
-split [1;2;1;2];;
-
-
-//4.9,  DeclareanF#function split such that: split
 (*
-ip([ x 0 ; x 1 ; ... ; x n − 1 ],[ y 0 ; y 1 ; ... ; y n − 1 ]) = [( x 0 ,y 0 );( x 1 ,y 1 ); ...
-;( x n − 1 ,y n − 1 )]
-*)    
+The set of complex numbers is the set of pairs of real numbers. Complex numbers behave almost
+like real numbers if addition and multiplication are defined by:
+(a, b) + (c, d) = (a + c, b + d)
+(a, b) · (c, d) = (ac − bd, bc + ad)
+1. Declare suitable infix functions for addition and multiplication of complex numbers.
+2. The inverse of (a, b) with regard to addition, that is, −(a, b), is (−a,−b), and the inverse of
+(a, b) with regard to multiplication, that is, 1/(a, b), is (a/(a2+b2),−b/(a2+b2)) (provided
+that a and b are not both zero). Declare infix functions for subtraction and division of complex
+numbers.
+3. Use let-expressions in the declaration of the division of complex numbers in order to avoid
+repeated evaluation of identical subexpressions.
+*)
 
-//let rec split = 
-//    function
-//    | [] -> ([],[]) 
-//    | x1::x2::rest -> let (a, b) = split rest
-//                      (x1::a, x2::b);;
-//split [1;2;1;2];;
+// 3.3 - 1
+let (.+.) (a,b) (c,d) = (a+c, b+d);;
+(.+.) (1, 2) (2,2);; 
+(1, 2) .+. (2,2);; 
 
-let rec zip xs ys =
+let (.*.)(a,b)(c,d) = (a*c - b*d, b*c + a*d);;
+(1, 2) .*. (2,2);; 
+
+// 3.3 - 2
+let (./.) 1 (a:int,b:int) = ((float a/ float (a*a + b*b)),  (float -1* float b / float (a*a + b*b)));;
+1 ./. (2, 5) ;;
+
+// 3.3 - 3
+(*
+3. Use let-expressions in the declaration of the division of complex numbers in order to avoid
+repeated evaluation of identical subexpressions.
+*)
+
+// Exercise on sorting, correctness and property-based testing (available on FileSharing Thursday)
+
+//merge([1;4;9;12],[2;3;4;5;10;13]) = [1;2;3;4;4;5;9;10;12;13].
+let rec merge (xs, ys) = 
     match (xs, ys) with
-    | [], [] -> [] 
-    | x::rextx, y::resty -> let (list) = zip rextx resty
-                            (x, y)::list;;
-zip [1;2] [1;2];;
+    |[], [] -> []
+    |[], _ -> ys
+    |_, [] -> xs
+    |xHead::xTail, yHead::yTail -> if xHead < yHead 
+                                   then xHead::merge (xTail, yHead::yTail) 
+                                   else yHead::merge (yTail, xHead::xTail)    ;;
+merge([0],[2;3;4;5;10;13]) ;;
+merge([2;3;4;5;10;13],[0]) ;;
+merge([2;3;4;5;10;13],[1;6;7;8;9;11;12]) ;;
 
-
-   
-
-//4.12
 (*
-p(x) x > 0
-the sum of elements in xs satisfying the condition of px
+Declare a function to split a list into two lists of (almost) the same lengths. You may
+declare the function split such that
+split [x0; x1; x2; x3; : : : ; xn􀀀1] = ([x0; x2; : : :]; [x1; x3; : : :])
 *)
+let rec split = function
+    | [] -> [],[]
+    | head::tail -> let (a,b) = split tail
+                    if tail.Length % 2 = 0 
+                    then (head::a,b)
+                    else (a,head::b);;
+split([0;1;2;3;4;5;6]) ;;
+                    
 
-let p x = x > 0;;
-p 2;;
-p -1;;
-p 0;;
+(*The sort function
+The idea behind top-down merge sort is a recursive algorithm: take an arbitrary list xs
+with more than one element and split it into two (almost) equal-length lists: xs1 and xs2.
+Sort xs1 and xs2 and merge the results. The empty list and lists with just one element are
+the base cases.
+Declare an F# function for top-down merge sort.*)
 
-let rec fib n = if n < 2 then 1 else fib (n - 1) + fib (n - 2)
+let rec merge (xs, ys) = 
+    match (xs, ys) with
+    |[], [] -> []
+    |[], _ -> ys
+    |_, [] -> xs
+    |xHead::xTail, yHead::yTail -> if xHead < yHead 
+                                   then xHead::merge (xTail, yHead::yTail) 
+                                   else yHead::merge (yTail, xHead::xTail);;
+let rec split = function
+| [] -> [],[]
+| head::tail -> let (a,b) = split tail
+                if tail.Length % 2 = 0 
+                then (head::a,b)
+                else (a,head::b);;
 
-let rec sum p x xs = 
-    if p(x) && x = head::xs  then 1 + sum(p x xs)
-    else 0 + sum(p x xs)  ;;
-                                
-let rec sum2 (p, x, xs) =
-    match (xs) with
-    | ([]) -> 0
-    | (head::xs) when head <> x -> sum2(p, x, xs )
-    | (head::xs) when p(x) && head = x -> 1 + sum2(p, x, xs );;  
+let rec sort = function
+    | [] -> []
+    | list when list.Length = 1 -> list
+    | list -> 
+              let splittedLists = split list
+              let list1 = sort (fst splittedLists)
+              let list2 = sort (snd splittedLists)
+              merge (list1, list2);;
+sort([7;6;4;2;1;0;14;0]) ;;
 
-sum2 (p, 1,[1;2]);;
-sum2 (p, 2,[]);;
-sum2 (p, 3,[1;0;2]);;
-sum2 (p, 3,[3;0;3]);;
+(*Declare an F# function ordered: int list -> bool to test whether a list is ordered.
+A function that returns a truth value, such as ordered is also called a predicate.
+One part of the correctness properties of sort can be expressed by the predicate:*)
+
+let rec ordered = function
+    |[] -> true
+    |list when list.Length = 1 -> true 
+    |xHead::yHead::xTail -> if xHead <= yHead 
+                            then true && ordered (yHead::xTail) 
+                            else false;;
+ordered([7;6;4;2;1;0;14;0]) ;;
+ordered([0;1;4]) ;;
+
+//let ordered xs = List.fold (fun x y -> x >= y) xs    ;;
+// List.fold (fun x y -> x + y) 0 [1; 2; 3] // val it : int = 6
+
+let orderedSort(xs: int list) = ordered(sort xs)
+orderedSort([7;6;4;2;1;0;14;0]) ;;
