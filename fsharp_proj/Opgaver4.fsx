@@ -19,8 +19,7 @@ let rec sum (p, xs) =
     match (xs) with
     | ([]) -> 0
     | (head::tail) when p(head) -> 1 + sum(p, tail )
-    | (head::tail) -> sum(p, tail )
-    ;;  
+    | (head::tail) -> sum(p, tail ) ;;  
 
 sum (p, [1;2]);;
 sum (p, []);;
@@ -67,12 +66,9 @@ let reg = [("a1",("cheese",25));
     ("a2",("herring",4));
     ("a3",("soft drink",5)) ];;
 
-//let findArticle ac reg = List.tryFind (fun (name, namePrice) -> name = ac) reg ;;
 findArticle "a2" reg;;
 
 // The function makeBill is declared using List.foldBack
-
-
 let rec makeBill reg = function
     | [] -> ([],0)
     | (np,ac)::pur -> let (aname,aprice) = findArticle ac reg
@@ -81,7 +77,8 @@ let rec makeBill reg = function
                       ((np,aname,tprice)::billtl,tprice+sumtl);;
 makeBill reg pur;;
 
-let makeBill (pur, reg) = List.foldBack (fun (np,ac) (n, y) -> (np, fst (findArticle ac reg), np * snd (findArticle ac reg))::n, y+np * (snd (findArticle ac reg)))  pur ([], 0) ;;
+let makeBill (pur, reg) = List.foldBack (fun (np,ac) (n, y) -> 
+(np, fst (findArticle ac reg), np * snd (findArticle ac reg))::n, y+np * (snd (findArticle ac reg)))  pur ([], 0) ;;
 makeBill (pur, reg);;
 
 (* 
@@ -95,8 +92,6 @@ mixMap f [x0; x1; . . . ; xm] [y0; y1; . . . ; ym] = [f(x0, y0); f(x1, y1); . . 
 unmixMap f g [(x0, y0); (x1, y1); . . . ; (xn, yn)] = ([f x0; f x1; . . . ; f xn], [g y0; g y1; . . . ; g yn])
 3. Give the most general types for mixMap and unmixMap.
 *)
-
-//gammel sum
 
 let f (x, y) = (x * 2, y * 2);
 let f2 x = (x * x);
@@ -123,17 +118,10 @@ unMixMap (f2, g, [(1, 2); (1, 2); (3, 4); (3, 4) ]);;
 let f (x, y) = (x * 2, y * 2);
 let f2 x = (x * x);
 let g x = x * 2;
-let makeBill (pur, reg) = List.foldBack (fun (np,ac) (n, y) -> (np, fst (findArticle ac reg), np * snd (findArticle ac reg))::n, y+np * (snd (findArticle ac reg)))  pur ([], 0) ;;
 
-let pairlists ((a, b) : 'a list * 'b list) = 
-    List.zip a b
-
-let mixMap2 (f, (xs, ys)  : 'a list * 'b list) = List.foldBack (fun (x, y) n  ->  f (x::xs, y::ys)::n) (xs, ys) [] : (int * int) list ;;
-
-mixMap2 (f, [1;2;3],[3;2;1]);;
-mixMap2 (f, [],[]);;
-
-
+// let mixMap2 (f, (xs, ys)  : 'a list * 'b list) = List.foldBack (fun (x, y) n  ->  f (x::xs, y::ys)::n) (xs, ys) [] : (int * int) list ;;
+// mixMap2 (f, ([1;2;3],[3;2;1]));;
+// mixMap2 (f, [],[]);;
 // 3. Give the most general types for mixMap and unmixMap.
 // ints, floats?
 
@@ -147,19 +135,17 @@ type Multiset<'a when 'a : equality> = ('a * int) list;;
 let invariantS (inv:Multiset<'a>) = List.foldBack (fun (x,y) n  -> n = (List.contains (x, y) inv) && n) inv true ;;
 
 let set1 = [("b",3); ("a",5); ("d",1)];;
-let set2 = [("b",3); ("a",5); ("d",1); ("b",2);];;
+let set2 = [("b",3); ("a",5); ("d",1); ("b",3);];;
 
-// kan man nøjes med at søge på x og ikke y?
 let rec invariantS2 xs =
     match xs with
     | ([]) -> true
     | ((x,y)::tail) -> let a = invariantS2 tail
                        a && not (List.contains (x, y) tail) ;;  
-             
-List.exists (fun (value, n) -> value = fst ("g", 2) ) set2 ;;
+
 invariantS2 set1;;
 invariantS2 set2;;
-invariantS set1;;
+invariantS2 set1;;
 
 (*
 Declare a function insert: 'a -> int -> Multiset<'a> -> Multiset<'a>, where
@@ -206,14 +192,6 @@ delete "o" set1;;
 
 let rec union (xs: Multiset<'a>, ys: Multiset<'a>):Multiset<'a> = 
     match (xs, ys) with
-    | (xs, []) -> xs
-    | ([], ys) -> ys
-    | ((xHeadVal, xHeadN)::xTail, (yHeadVal, yHeadN)::yTail) -> let mSet = union (xTail, yTail)
-                                                                insert xHeadVal xHeadN mSet
-                                                              
-                                                                insert yHeadVal yHeadN mSet;;
-let rec union (xs: Multiset<'a>, ys: Multiset<'a>):Multiset<'a> = 
-    match (xs, ys) with
     | ([],[]) ->   []
     | ((xHeadVal, xHeadN)::xTail, []) -> let mSet = union (xTail, ys)
                                          (xHeadVal, xHeadN)::mSet
@@ -228,6 +206,88 @@ let rec union (xs: Multiset<'a>, ys: Multiset<'a>):Multiset<'a> =
                                                 //insert xHeadVal xHeadN mSet
                                                 (xHeadVal, xHeadN)::mSet
                                             ;;
+
+let rec union (xs: Multiset<'a>, ys: Multiset<'a>) : Multiset<'a> = 
+    match (xs, ys) with
+    | (xs, []) -> xs
+    | ([], ys) -> ys
+    | ((xHeadVal, xHeadN)::xTail, (yHeadVal, yHeadN)::yTail) -> let mSet = union (xTail, yTail)
+                                                                insert xHeadVal xHeadN mSet
+                                                                insert yHeadVal yHeadN mSet;;
+
 union ([("b",3); ("a",5); ("d",1)], [("a",3); ("b",4); ("c",2)]);;
 // [("a", 8); ("b", 7); ("c",2); ("d", 1)]
 union ([], []);;
+
+(* 
+We shall now represent multisets by maps from elements to multiplicities:
+type MultisetMap<'a when 'a : comparison> = Map<'a,int>;;
+This representation of a multiset ms has a simpler invariant: the multiplicity n of each
+entry (e, n) of ms satisfies n > 0.
+6. Give new declarations for inv, insert and union on the basis of the map representation. 
+*)
+
+type MultisetMap<'a when 'a : comparison> = Map<'a,int>;;
+
+let m = Map.ofList [(0,"a") ; (2, "c"); (3,"d")];;
+
+let set1 = [("b",3); ("a",5); ("d",1)];;
+let set2 = [("b",3); ("a",5); ("d",1); ("b",3);];;
+
+let m1 = Map.ofList set1;;
+let m2 = Map.ofList set2;;
+
+let rec invariantMap xs =
+   match Map.tryFind with   
+   | None -> raise FindArticle
+   | Some(aname,aprice) ->
+       let tprice = np*aprice
+       let (infos,sumbill) = makeBill reg pur  
+       ((np,aname,tprice)::infos, tprice+sumbill);;
+ 
+
+// Insert
+let insert3 (e: 'a, n:int, ms:Map<'a, int>): Map<'a, int> = 
+    let result = ms.TryFind e
+    match result with
+        | Some n2 -> let returnMap = ms.Remove e 
+                     let newN = (n + n2)
+                     returnMap.Add (e, newN) 
+        | None -> ms.Add (e, n) ;;
+        
+insert3 ("e", 2, (Map.ofList [("b",3); ("a",5); ("d",1)]));;
+insert3 ("a", 2, (Map.ofList [("b",3); ("a",5); ("d",1)]));;
+
+// Union
+let rec union (xs: Multiset<'a>, ys: Multiset<'a>):Multiset<'a> = 
+    match (xs, ys) with
+    | (xs, []) -> xs
+    | ([], ys) -> ys
+    | ((xHeadVal, xHeadN)::xTail, (yHeadVal, yHeadN)::yTail) -> let mSet = union (xTail, yTail)
+                                                                insert xHeadVal xHeadN mSet
+                                                                insert yHeadVal yHeadN mSet;;
+type MultisetMap<'a when 'a : comparison> = Map<'a,int>;;
+let numberOf e ms = List.foldBack (fun (value, n) count -> if value = e then count + n else count)  ms 0 ;; 
+let unionMap (xs: Map<'a, int>, ys: Map<'a, int>) = Map.foldBack (fun (key, value) map -> insert3 (key, value, map)) xs [];;
+let unionMap (xs: Map<string, int>, ys: Map<string, int>) = Map.foldBack (fun (key, value) -> map.Add (key, value)) xs [];;
+
+
+let unionMap (xs: Map<string, int>, ys: Map<string, int>) = 
+    let f = insert3()
+    Map.foldBack (fun (key, value) -> map.Add (key, value)) xs [];;
+
+
+let m1 = Map.ofList [("b", 3); ("a", 5); ("d",1)];;
+let m2 = Map.ofList([("a",3); ("b",4); ("c",2)]);;
+
+unionMap (m1, m2);;
+
+// [("a", 8); ("b", 7); ("c",2); ("d", 1)]
+union ([], []);;
+
+let m = Map.ofList [("a", 1) ; ("b", 2); ("c", 3)];;
+m.Add ("d", 4);;
+
+
+let list1: (string * int) list = [];;
+Map.ofList list1;;

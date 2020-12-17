@@ -23,8 +23,6 @@ let rec f n =
     | 0 -> 0
     | n -> n + f(n-1);; 
 
-    (* *)
-
 let rec f2 (m,n) = 
     match (m,n) with
     | (_,0) -> m

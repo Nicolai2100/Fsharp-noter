@@ -13,25 +13,7 @@ let main argv =
 
 let rec repeat f i x =
     if i = 0 then x else repeat f (i-1) (f x);;
-(* 
-        type repeat (int -> int) -> int -> int -> int
-(argument) -> result
- x could be float, not i
- computed:
- repeat h 2 0 
- repeat h 1 (h 0) = 1 
- repeat h 0 (h 1) = 2
- 2
-*)
 
-
-(* 
-    Uge 2
-    HR 2.1, 2.2, 2.13, 4.3, 4.8, 4.9, 4.12
-    Addendum to Exercise on polynimials: Part 1
-    Declare a higher-order function: f so that add = f (+) and sub = f (-)
-    Exercise on polynomials: Part 2. You may also consider/start on Part 3
-*)
 //2.1 f: int -> bool
 let f (x) = ((x % 2 = 0 || x % 3 = 0) && x % 5 <> 0) ;;
 f (24);;
@@ -88,19 +70,6 @@ let rec split =
     | x1::x2::rest -> let (a, b) = split rest
                       (x1::a, x2::b);;
 split [1;2;1;2];;
-
-//4.9,  DeclareanF#function split such that: split
-(*
-ip([ x 0 ; x 1 ; ... ; x n − 1 ],[ y 0 ; y 1 ; ... ; y n − 1 ]) = [( x 0 ,y 0 );( x 1 ,y 1 ); ...
-;( x n − 1 ,y n − 1 )]
-*)    
-
-//let rec split = 
-//    function
-//    | [] -> ([],[]) 
-//    | x1::x2::rest -> let (a, b) = split rest
-//                      (x1::a, x2::b);;
-//split [1;2;1;2];;
 
 let rec zip xs ys =
     match (xs, ys) with

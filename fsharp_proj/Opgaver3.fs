@@ -33,8 +33,8 @@ type Arrangement = Member -> bool ;;
 
 let p1 (name,(no, yb, ths)) = yb > 1982 && List.contains "jazz" ths;;
 
-let m1:Member = ("Karl Karlsen", ("22342016", 1991, ["ost";"jazz"]));;
-let m2:Member = ("Karl2 Karlsen2", ("22342016", 1977, ["ost";"jazz"]));;
+let m1: Member = ("Karl Karlsen", ("22342016", 1991, ["ost";"jazz"]));;
+let m2: Member = ("Karl2 Karlsen2", ("22342016", 1977, ["ost";"jazz"]));;
 let memberList:Register = [m1;m2];;
 p1 (m1);;
 

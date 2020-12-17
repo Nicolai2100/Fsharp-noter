@@ -6,15 +6,37 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Poly.fs" />
     <Compile Include="Opgaver1.fs" />
     <Compile Include="Opgaver2.fs" />
     <Compile Include="Opgaver3.fs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Opgaver3 - scripts.fsx" />
     <None Include="Opgaver4.fsx" />
+    <None Include="Opgaver5.fsx" />
+    <None Include="Opgaver6.fsx" />
+    <None Include="Opgaver7.fsx" />
+    <None Include="Opgaver8.fsx" />
+    <None Include="Opgaver9.fsx" />
+    <Compile Include="Poly.fs" />
+    <None Include="Lists.fsx" />
+    <None Include="Maps.fsx" />
+    <None Include="Mutual Recursion.fsx" />
+    <None Include="Propositional Logic.fsx" />
+    <None Include="Sequences.fsx" />
+    <None Include="Simple Compiler.fsx" />
+    <None Include="Tail Recursion.fsx" />
+    <None Include="Trees.fsx" />
+    <None Include="OldExamsWeek13.fsx" />
+    <None Include="EksamensOpgaver - Fall2011.fsx" />
+    <None Include="EksamensOpgaver - Fall2012.fsx" />
+    <None Include="EksamensOpgaver - Fall2013.fsx" />
+    <None Include="EksamensOpgaver - Summer2014.fsx" />
+    <None Include="EksamensOpgaver - Fall2014.fsx" />
+    <None Include="EksamensOpgaver - Summer2015.fsx" />
+    <None Include="EksamensOpgaver - Fall2015.fsx" />
+    <None Include="EksamensOpgaver - Fall2016.fsx" />
+    <None Include="NicolaiLarsenS185020.fsx" />
   </ItemGroup>
 
   <ItemGroup>
